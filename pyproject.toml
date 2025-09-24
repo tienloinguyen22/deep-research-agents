@@ -9,5 +9,7 @@ dependencies = [
     "autogen-core>=0.7.4",
     "autogen-ext[azure]>=0.7.4",
     "dotenv>=0.9.9",
+    "duckduckgo-search>=8.1.1",
+    "nltk>=3.9.1",
     "python-dotenv>=1.1.1",
 ]

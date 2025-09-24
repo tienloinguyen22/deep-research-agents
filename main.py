@@ -1,9 +1,12 @@
 import os
 import asyncio
+import nltk
 from dotenv import load_dotenv
 from autogen_ext.models.azure import AzureAIChatCompletionClient
 from azure.core.credentials import AzureKeyCredential
 from autogen_core.models import ModelInfo, ModelFamily, UserMessage
+
+nltk.download('punkt')
 
 async def main():
   load_dotenv()
@@ -20,7 +23,7 @@ async def main():
       json_output=True,
       family=ModelFamily.GPT_4,
       structured_output=True,
-    )
+    ),
   )
 
   # test model
@@ -33,7 +36,6 @@ async def main():
   print("Finish Reason: ", result.finish_reason)
   print("Thought: ", result.thought)
   print("Usage: ", result.usage)
-
 
   # close
   await model_client.close()
