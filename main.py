@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from autogen_ext.models.azure import AzureAIChatCompletionClient
 from azure.core.credentials import AzureKeyCredential
 from autogen_core.models import ModelInfo, ModelFamily, UserMessage
+from tools.scrape import web_scrape
 from tools.search import web_search
 
 nltk.download('punkt')
@@ -41,17 +42,26 @@ async def main():
   # print("Usage: ", result.usage)
   # print("-"*80)
 
-  # test search tool
-  query = "AI in improving software engineer performance"
-  print("Query: ", query)
+  # # test search tool
+  # query = "AI in improving software engineer performance"
+  # print("Query: ", query)
 
-  rawResults = await web_search(query)
+  # rawResults = await web_search(query)
+  # parsedResults = json.loads(rawResults)
+  # for result in parsedResults["summarize_results"]:
+  #   print("Title: ", result["title"])
+  #   print("Snippet: ", result["snippet"])
+  #   print("URL: ", result["url"])
+  #   print("-"*30)
+
+  # test scraping tool
+  url = "https://blog.langchain.com/introducing-open-swe-an-open-source-asynchronous-coding-agent/"
+  print("URL: ", url)
+
+  rawResults = await web_scrape(url)
   parsedResults = json.loads(rawResults)
-  for result in parsedResults["summarize_results"]:
-    print("Title: ", result["title"])
-    print("Snippet: ", result["snippet"])
-    print("URL: ", result["url"])
-    print("-"*30)
+  print("Text: ", parsedResults["text"])
+  print("File Path: ", parsedResults["file_path"])
 
   # # close
   # await model_client.close()

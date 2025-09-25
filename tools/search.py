@@ -1,5 +1,6 @@
 import json
 import os
+import uuid
 from ddgs import DDGS
 from autogen_core.tools import FunctionTool
 from nltk.tokenize import word_tokenize
@@ -31,7 +32,7 @@ async def web_search(query: str, max_results: int = 5) -> str:
 
     # store the full result into a file for later reference
     os.makedirs("search_results", exist_ok=True)
-    file_path = f"./search_results/web_search_{query.replace(' ', '_').lower()}.json"
+    file_path = f"./search_results/web_search_{uuid.uuid4()}.json"
     with open(file_path, "w") as f:
       json.dump(results, f)
 
