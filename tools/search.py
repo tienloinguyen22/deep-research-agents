@@ -19,11 +19,11 @@ async def web_search(query: str, max_results: int = 5) -> str:
     ddgs = DDGS()
     results = ddgs.text(query, max_results=max_results)
 
-    # only return 50 tokens for snippet to save context window
+    # only return 80 tokens for snippet to save context window
     summarize_results = [
       {
         "title": r["title"],
-        "snippet": " ".join(word_tokenize(r["body"])[:50]),
+        "snippet": " ".join(word_tokenize(r["body"])[:80]),
         "url": r["href"],
       }
       for r in results
@@ -31,7 +31,7 @@ async def web_search(query: str, max_results: int = 5) -> str:
 
     # store the full result into a file for later reference
     os.makedirs("search_results", exist_ok=True)
-    file_path = f"./search_results/web_search_{query.replace(' ', '_')}.json"
+    file_path = f"./search_results/web_search_{query.replace(' ', '_').lower()}.json"
     with open(file_path, "w") as f:
       json.dump(results, f)
 
