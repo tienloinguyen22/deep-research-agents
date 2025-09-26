@@ -17,3 +17,6 @@ search_results
 
 # Scrape results
 scrape_results
+
+# Output results
+output_results

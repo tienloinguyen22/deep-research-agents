@@ -42,14 +42,14 @@ def save_text(url: str, text: str) -> str:
 
 async def web_scrape(
   url: str,
-  max_return_tokens: int = 500,
+  max_return_tokens: int = 300,
   use_newspaper: Optional[bool] = None
 ) -> str:
   """Scrape text content from a URL using either newspaper4k or BeautifulSoup.
 
   Args:
     url (str): The URL to scrape (e.g., "https://example.com/article").
-    max_return_tokens (int): Maximum tokens of the scraped text (default: 500 tokens).
+    max_return_tokens (int): Maximum tokens of the scraped text (default: 300 tokens).
     use_newspaper (bool): Whether to use newspaper4k to scrape the text (default: False).
 
   Returns:
@@ -116,7 +116,7 @@ web_scrape_tool = FunctionTool(
   name="web_scrape",
   description=f"""Scrapes text content from a URL using either newspaper4k or BeautifulSoup.
   Use this tool when tasked with extracting text from a web page.
-  Input: A string URL (e.g., "https://example.com/article") and optional max_return_tokens (int, default 500 tokens).
+  Input: A string URL (e.g., "https://example.com/article") and optional max_return_tokens (int, default 300 tokens).
   Output: A JSON string containing the extracted text (up to max_return_tokens tokens) or an error message and file path for full data.
   Limitations: May hit rate limits; returns error if scraping fails.
   Example: web_scrape("https://example.com/article", max_return_tokens=500)""",

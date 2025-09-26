@@ -89,6 +89,18 @@ wheels = [
 ]
 
 [[package]]
+name = "autogen-agentchat"
+version = "0.7.4"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "autogen-core" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/f1/12/a191a1b0dcb45a341e7a044fca82e71883a3cf8671fe7ad67e6d5d6f2a46/autogen_agentchat-0.7.4.tar.gz", hash = "sha256:9e9f0362c70d110479de351f8fc6afd497d9c926bd833f1bfafc118d993734c4", size = 147026, upload-time = "2025-08-19T18:49:22.521Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/39/eb/f1a278169a98c239720fc3cd050cde241c26813b53bbb573149d97f1e5fc/autogen_agentchat-0.7.4-py3-none-any.whl", hash = "sha256:8f62bf2854fa06663d37576500c3ef92f291c61f1d0026a6d60c46fa55292dde", size = 119094, upload-time = "2025-08-19T18:49:20.884Z" },
+]
+
+[[package]]
 name = "autogen-core"
 version = "0.7.4"
 source = { registry = "https://pypi.org/simple" }
@@ -472,6 +484,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "aiohttp" },
+    { name = "autogen-agentchat" },
     { name = "autogen-core" },
     { name = "autogen-ext", extra = ["azure"] },
     { name = "ddgs" },
@@ -486,6 +499,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "aiohttp", specifier = ">=3.12.15" },
+    { name = "autogen-agentchat", specifier = ">=0.7.4" },
     { name = "autogen-core", specifier = ">=0.7.4" },
     { name = "autogen-ext", extras = ["azure"], specifier = ">=0.7.4" },
     { name = "ddgs", specifier = ">=9.6.0" },

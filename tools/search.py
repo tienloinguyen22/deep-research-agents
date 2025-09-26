@@ -24,7 +24,7 @@ async def web_search(query: str, max_results: int = 5) -> str:
     summarize_results = [
       {
         "title": r["title"],
-        "snippet": " ".join(word_tokenize(r["body"])[:80]),
+        "snippet": " ".join(word_tokenize(r["body"])[:50]),
         "url": r["href"],
       }
       for r in results
