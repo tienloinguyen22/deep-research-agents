@@ -13,6 +13,7 @@ from tools.scrape import web_scrape_tool
 from tools.search import web_search_tool
 from autogen_agentchat.conditions import TextMentionTermination
 from autogen_agentchat.ui import Console
+from autogen_ext.memory.redis import RedisMemory, RedisMemoryConfig
 
 nltk.download('punkt')
 nltk.download('punkt_tab')
@@ -21,7 +22,7 @@ async def main():
   load_dotenv()
   print("Hello from deep-research-agents!")
 
-  # init model & agents
+  # init model
   model_client = AzureAIChatCompletionClient(
     model="openai/gpt-4o",
     endpoint="https://models.github.ai/inference",
@@ -34,12 +35,25 @@ async def main():
       structured_output=True,
     ),
   )
+
+  # init memory
+  redis_memory = RedisMemory(
+    config=RedisMemoryConfig(
+      redis_url="redis://localhost:6379",
+      index_name="chat_history",
+      prefix="memory",
+      top_k=5
+    )
+  )
+
+  # init agents
   planner_agent = AssistantAgent(
     name="PlannerAgent",
     description=PLANNER_AGENT_DESCRIPTION,
     model_client=model_client,
     system_message=PLANNER_AGENT_PROMPT,
     handoffs=["SearchAgent", "WriterAgent", "CriticAgent"],
+    memory=[redis_memory],
   )
   search_agent = AssistantAgent(
     name="SearchAgent",
@@ -48,6 +62,7 @@ async def main():
     system_message=SEARCH_AGENT_PROMPT,
     tools=[read_file_tool, web_scrape_tool, web_search_tool],
     handoffs=["WriterAgent", "PlannerAgent"],
+    memory=[redis_memory],
   )
   writer_agent = AssistantAgent(
     name="WriterAgent",
@@ -56,6 +71,7 @@ async def main():
     system_message=WRITER_AGENT_PROMPT,
     tools=[read_file_tool, write_output_to_file_tool],
     handoffs=["CriticAgent", "PlannerAgent"],
+    memory=[redis_memory],
   )
   critic_agent = AssistantAgent(
     name="CriticAgent",
@@ -64,6 +80,7 @@ async def main():
     system_message=CRITIC_AGENT_PROMPT,
     tools=[read_file_tool],
     handoffs=["WriterAgent", "PlannerAgent"],
+    memory=[redis_memory],
   )
 
   # run team
