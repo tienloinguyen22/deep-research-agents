@@ -11,6 +11,8 @@ import newspaper
 from nltk.tokenize import word_tokenize
 from autogen_core.tools import FunctionTool
 
+from tools.search import summarize_result
+
 user_agents = [
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15",
@@ -70,9 +72,10 @@ async def web_scrape(
       article.download()
       article.parse()
       text = article.text
-      file_path = save_text(url, text)
+      summarized_text = await summarize_result(text)
+      file_path = save_text(url, summarized_text)
       return json.dumps({
-        "text": " ".join(word_tokenize(text)[:max_return_tokens]) if text else "Error: No content extracted by newspaper4k.",
+        "text": " ".join(word_tokenize(summarized_text)[:max_return_tokens]) if summarized_text else "Error: No content extracted by newspaper4k.",
         "file_path": file_path
       })
     else:
@@ -96,9 +99,10 @@ async def web_scrape(
       # Clean and combine text
       combined_text = " ".join(text_parts)
       cleaned_text = re.sub(r'\s+', ' ', combined_text).strip()
-      file_path = save_text(url, cleaned_text)
+      summarized_text = await summarize_result(cleaned_text)
+      file_path = save_text(url, summarized_text)
       return json.dumps({
-        "text": " ".join(word_tokenize(cleaned_text)[:max_return_tokens]) if cleaned_text else "Error: No content extracted by BeautifulSoup.",
+        "text": " ".join(word_tokenize(summarized_text)[:max_return_tokens]) if summarized_text else "Error: No content extracted by BeautifulSoup.",
         "file_path": file_path
       })
   except requests.exceptions.Timeout:
